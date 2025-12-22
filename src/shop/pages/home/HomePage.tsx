@@ -1,10 +1,10 @@
 import { Button } from '@/components/ui/button'
+import { CustomJumbotron } from '@/shop/components/CustomJumbotron'
 
 export const HomePage = () => {
   return (
-    <div>
-      <h1>Hola mundo</h1>
-      <Button>Hola mundo</Button>
-    </div>
+    <>
+      <CustomJumbotron title="Teslo Shop" />
+    </>
   )
 }

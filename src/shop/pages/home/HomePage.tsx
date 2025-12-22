@@ -1,3 +1,4 @@
+import { CustomPagination } from '@/components/custom/CustomPagination'
 import { Button } from '@/components/ui/button'
 import { CustomJumbotron } from '@/shop/components/CustomJumbotron'
 
@@ -5,6 +6,8 @@ export const HomePage = () => {
   return (
     <>
       <CustomJumbotron title="Teslo Shop" />
+      
+      <CustomPagination totalPages={7} />
     </>
   )
 }

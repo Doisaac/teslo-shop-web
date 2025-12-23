@@ -32,9 +32,9 @@ export const CustomHeader = () => {
   return (
     <header className="sticky top-0 z-50 w-full border-b backdrop-blur bg-slate-50">
       <div className="container mx-auto px-4 lg:px-8">
-        <div className="flex h-16 items-center justify-between">
+        <div className="flex h-16 w-full items-center justify-between md:grid md:grid-cols-[1fr_auto_1fr] md:justify-stretch">
           {/* Logo */}
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-4 justify-start">
             <Button variant="ghost" size="icon" className="md:hidden">
               <Menu className="h-5 w-5" />
             </Button>
@@ -42,7 +42,7 @@ export const CustomHeader = () => {
           </div>
 
           {/* Navigation - Desktop */}
-          <nav className="hidden md:flex items-center space-x-8">
+          <nav className="hidden md:flex items-center space-x-8 justify-center">
             <Link
               to="/"
               className={cn(
@@ -82,7 +82,7 @@ export const CustomHeader = () => {
           </nav>
 
           {/* Search and Cart */}
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-4 justify-end">
             <div className="hidden md:flex items-center space-x-2">
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />

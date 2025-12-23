@@ -1,9 +1,10 @@
-import { Search, Menu } from 'lucide-react'
+import { Search } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { useRef, type KeyboardEvent } from 'react'
 import { Link, useParams, useSearchParams } from 'react-router'
 import { cn } from '@/lib/utils'
+import { CustomLogo } from '@/components/custom/CustomLogo'
 
 export const CustomHeader = () => {
   const [searchParams, setSearchParams] = useSearchParams()
@@ -32,12 +33,7 @@ export const CustomHeader = () => {
       <div className="container mx-auto px-4 lg:px-8">
         <div className="flex h-16 w-full items-center justify-between md:grid md:grid-cols-[1fr_auto_1fr] md:justify-stretch">
           {/* Logo */}
-          <div className="flex items-center space-x-4 justify-start">
-            <Button variant="ghost" size="icon" className="md:hidden">
-              <Menu className="h-5 w-5" />
-            </Button>
-            <h1 className="text-xl font-semibold tracking-tight">TESLO SHOP</h1>
-          </div>
+          <CustomLogo />
 
           {/* Navigation - Desktop */}
           <nav className="hidden md:flex items-center space-x-8 justify-center">

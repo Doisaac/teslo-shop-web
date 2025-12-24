@@ -38,7 +38,9 @@ export const AdminSidebar: React.FC<SidebarProps> = ({
 
   const isActiveRoute = (to: string) => {
     // TODO: refactor when products screen is ready
-
+    if (pathname.includes('/admin/products/') && to === '/admin/products') {
+      return true
+    }
     return pathname === to ? true : false
   }
 

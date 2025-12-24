@@ -12,6 +12,18 @@ import {
   ChevronRight,
 } from 'lucide-react'
 import { CustomLogo } from '@/components/custom/CustomLogo'
+import { Link, useLocation } from 'react-router'
+
+const menuItems = [
+  { icon: Home, label: 'Dashboard', to: '/admin' },
+  { icon: BarChart3, label: 'Products', to: '/admin/products' },
+  { icon: Users, label: 'Usuarios' },
+  { icon: ShoppingCart, label: 'Ordenes' },
+  { icon: FileText, label: 'Reporte' },
+  { icon: Bell, label: 'Notificaciones' },
+  { icon: Settings, label: 'Ajustes' },
+  { icon: HelpCircle, label: 'Ayuda' },
+]
 
 interface SidebarProps {
   isCollapsed: boolean
@@ -22,16 +34,13 @@ export const AdminSidebar: React.FC<SidebarProps> = ({
   isCollapsed,
   onToggle,
 }) => {
-  const menuItems = [
-    { icon: Home, label: 'Dashboard', active: true },
-    { icon: BarChart3, label: 'Analytics' },
-    { icon: Users, label: 'Users' },
-    { icon: ShoppingCart, label: 'Orders' },
-    { icon: FileText, label: 'Reports' },
-    { icon: Bell, label: 'Notifications' },
-    { icon: Settings, label: 'Settings' },
-    { icon: HelpCircle, label: 'Help' },
-  ]
+  const { pathname } = useLocation()
+
+  const isActiveRoute = (to: string) => {
+    // TODO: refactor when products screen is ready
+
+    return pathname === to ? true : false
+  }
 
   return (
     <div
@@ -61,10 +70,10 @@ export const AdminSidebar: React.FC<SidebarProps> = ({
             const Icon = item.icon
             return (
               <li key={index}>
-                <a
-                  href="#"
+                <Link
+                  to={item.to || '/admin'}
                   className={`flex items-center space-x-3 px-3 py-2 rounded-lg transition-all duration-200 group ${
-                    item.active
+                    isActiveRoute(item.to || '/doNotExist')
                       ? 'bg-blue-50 text-blue-600 border-r-2 border-blue-600'
                       : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
                   }`}
@@ -73,7 +82,7 @@ export const AdminSidebar: React.FC<SidebarProps> = ({
                   {!isCollapsed && (
                     <span className="font-medium">{item.label}</span>
                   )}
-                </a>
+                </Link>
               </li>
             )
           })}

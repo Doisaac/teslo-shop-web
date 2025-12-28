@@ -65,7 +65,7 @@ export const CustomHeader = () => {
               Mujeres
             </Link>
             <Link
-              to="/gender/kids"
+              to="/gender/kid"
               className={cn(
                 `text-sm font-medium transition-colors hover:text-primary`,
                 gender === 'kids' ? 'underline underline-offset-4' : ''

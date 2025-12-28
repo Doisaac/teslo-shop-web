@@ -8,7 +8,7 @@ export const FilterSidebar = () => {
   const [searchParams, setSearchParams] = useSearchParams()
 
   const currentSizes = searchParams.get('sizes')?.split(',') || []
-  const currentPrice = searchParams.get('price') || '200+'
+  const currentPrice = searchParams.get('price') || 'any'
 
   const handleSizeChange = (size: string) => {
     const newSizes = currentSizes.includes(size)
@@ -114,9 +114,9 @@ export const FilterSidebar = () => {
             <RadioGroupItem
               value="100-200"
               id="price3"
-              checked={currentPrice === '100-100'}
+              checked={currentPrice === '100-200'}
               onClick={() => {
-                handlePriceChange('100-100')
+                handlePriceChange('100-200')
               }}
             />
             <Label htmlFor="price3" className="text-sm cursor-pointer">

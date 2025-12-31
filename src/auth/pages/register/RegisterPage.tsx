@@ -1,16 +1,54 @@
+import { useState, type FormEvent } from 'react'
+import { Link, useNavigate } from 'react-router'
+
+import { toast } from 'sonner'
+
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { CustomLogo } from '@/components/custom/CustomLogo'
-import { Link } from 'react-router'
+import { useAuthStore } from '@/auth/store/auth.store'
 
 export const RegisterPage = () => {
+  const { register } = useAuthStore()
+
+  const [isPosting, setIsPosting] = useState(false)
+
+  const navigate = useNavigate()
+
+  const handleRegister = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    setIsPosting(true)
+
+    const formData = new FormData(event.target as HTMLFormElement)
+
+    const fullName = formData.get('fullName') as string
+    const email = formData.get('email') as string
+    const password = formData.get('password') as string
+
+    const registerResult = await register(fullName, email, password)
+
+    if (registerResult.ok) {
+      console.log('Se registro correctamente desde handle if')
+      navigate('/')
+      return
+    }
+
+    if (registerResult.message === `Key (email)=(${email}) already exists.`) {
+      toast.error('The email already exist, try a new one')
+    } else {
+      toast.error(registerResult.message)
+    }
+
+    setIsPosting(false)
+  }
+
   return (
     <div className="flex flex-col gap-6">
       <Card className="overflow-hidden p-0">
         <CardContent className="grid p-0 md:grid-cols-2">
-          <form className="p-6 md:p-8">
+          <form className="p-6 md:p-8" onSubmit={(e) => handleRegister(e)}>
             <div className="flex flex-col gap-6">
               <div className="flex flex-col items-center text-center">
                 <CustomLogo />
@@ -19,9 +57,10 @@ export const RegisterPage = () => {
                 </p>
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="username">Nombre</Label>
+                <Label htmlFor="fullName">Nombre</Label>
                 <Input
-                  id="username"
+                  id="fullName"
+                  name="fullName"
                   type="text"
                   placeholder="John Doe"
                   required
@@ -31,6 +70,7 @@ export const RegisterPage = () => {
                 <Label htmlFor="email">Correo</Label>
                 <Input
                   id="email"
+                  name="email"
                   type="email"
                   placeholder="mail@gmail.com"
                   required
@@ -48,12 +88,13 @@ export const RegisterPage = () => {
                 </div>
                 <Input
                   id="password"
+                  name="password"
                   type="password"
                   required
                   placeholder="Contraseña"
                 />
               </div>
-              <Button type="submit" className="w-full">
+              <Button type="submit" className="w-full" disabled={isPosting}>
                 Crear cuenta
               </Button>
               <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">

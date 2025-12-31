@@ -2,8 +2,11 @@ import { create } from 'zustand'
 import type { User } from '@/interfaces/user.interface'
 import { loginAction } from '../actions/login.action'
 import { checkAuthAction } from '../actions/check-auth.action'
+import { RegisterAction } from '../actions/register.action'
 
 type AuthStatus = 'authenticated' | 'not-authenticated' | 'checking'
+
+export type RegisterResult = { ok: true } | { ok: false; message: string }
 
 type AuthState = {
   // Properties
@@ -18,6 +21,11 @@ type AuthState = {
   login: (email: string, password: string) => Promise<boolean>
   logout: () => void
   checkAuthStatus: () => Promise<boolean>
+  register: (
+    fullname: string,
+    email: string,
+    password: string
+  ) => Promise<RegisterResult>
 }
 
 export const useAuthStore = create<AuthState>()((set, get) => ({
@@ -33,8 +41,6 @@ export const useAuthStore = create<AuthState>()((set, get) => ({
 
   // Actions
   login: async (email: string, password: string) => {
-    console.log({ email, password })
-
     try {
       const data = await loginAction(email, password)
       localStorage.setItem('token', data.token)
@@ -61,6 +67,24 @@ export const useAuthStore = create<AuthState>()((set, get) => ({
     } catch (error) {
       set({ user: undefined, token: null, authStatus: 'not-authenticated' })
       return false
+    }
+  },
+
+  register: async (fullname: string, email: string, password: string) => {
+    try {
+      const data = await RegisterAction(fullname, email, password)
+      set({ user: data.user, token: data.token, authStatus: 'authenticated' })
+
+      return { ok: true }
+    } catch (error) {
+      let message = 'Error al registrarse'
+
+      if (error instanceof Error) {
+        message = error.message
+      }
+
+      set({ user: null, token: null, authStatus: 'not-authenticated' })
+      return { ok: false, message }
     }
   },
 }))

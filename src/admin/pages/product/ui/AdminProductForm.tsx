@@ -5,18 +5,28 @@ import { useForm } from 'react-hook-form'
 import type { Product, Size } from '@/interfaces/product.interface'
 import { AdminTitle } from '@/admin/components/AdminTitle'
 import { Button } from '@/components/ui/button'
-import { useRef, useState, type KeyboardEvent } from 'react'
+import { useRef, useState } from 'react'
 import { cn } from '@/lib/utils'
 
 interface Props {
   title: string
   subtitle: string
   product: Product
+  isMutationPending: boolean
+
+  // Methods
+  onSubmit: (productLike: Partial<Product>) => Promise<void>
 }
 
 const availableSizes: Size[] = ['XS', 'S', 'M', 'L', 'XL']
 
-export const AdminProductForm = ({ title, subtitle, product }: Props) => {
+export const AdminProductForm = ({
+  title,
+  subtitle,
+  product,
+  onSubmit,
+  isMutationPending,
+}: Props) => {
   const [dragActive, setDragActive] = useState(false)
   const {
     register,
@@ -85,24 +95,19 @@ export const AdminProductForm = ({ title, subtitle, product }: Props) => {
     console.log(files)
   }
 
-  // TODO: remove
-  const onSubmit = (productLike: Product) => {
-    console.log('onSubmit', productLike)
-  }
-
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="flex justify-between items-center">
         <AdminTitle title={title} subtitle={subtitle} />
         <div className="flex justify-end mb-10 gap-4">
-          <Button variant="outline">
+          <Button variant="outline" type="button">
             <Link to="/admin/products" className="flex items-center gap-2">
               <X className="w-4 h-4" />
               Cancelar
             </Link>
           </Button>
 
-          <Button>
+          <Button disabled={isMutationPending} type="submit">
             <SaveAll className="w-4 h-4" />
             Guardar cambios
           </Button>

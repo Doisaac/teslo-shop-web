@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form'
 import type { Product, Size } from '@/interfaces/product.interface'
 import { AdminTitle } from '@/admin/components/AdminTitle'
 import { Button } from '@/components/ui/button'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { cn } from '@/lib/utils'
 
 interface Props {
@@ -15,10 +15,16 @@ interface Props {
   isMutationPending: boolean
 
   // Methods
-  onSubmit: (productLike: Partial<Product>) => Promise<void>
+  onSubmit: (
+    productLike: Partial<Product> & { files?: File[] }
+  ) => Promise<void>
 }
 
 const availableSizes: Size[] = ['XS', 'S', 'M', 'L', 'XL']
+
+interface FormInputs extends Product {
+  files?: File[]
+}
 
 export const AdminProductForm = ({
   title,
@@ -28,6 +34,7 @@ export const AdminProductForm = ({
   isMutationPending,
 }: Props) => {
   const [dragActive, setDragActive] = useState(false)
+
   const {
     register,
     handleSubmit,
@@ -35,11 +42,16 @@ export const AdminProductForm = ({
     getValues,
     setValue,
     watch,
-  } = useForm({
+  } = useForm<FormInputs>({
     defaultValues: product,
   })
 
   const tagInputRef = useRef<HTMLInputElement>(null)
+  const [files, setFiles] = useState<File[]>([])
+
+  useEffect(() => {
+    setFiles([])
+  }, [product])
 
   const selectedSizes = watch('sizes')
   const selectedTags = watch('tags')
@@ -88,11 +100,22 @@ export const AdminProductForm = ({
     setDragActive(false)
     const files = e.dataTransfer.files
     console.log(files)
+
+    if (!files) return
+    setFiles((prevFiles) => [...prevFiles, ...Array.from(files)])
+
+    const currentFiles = getValues('files') || []
+    setValue('files', [...currentFiles, ...Array.from(files)])
   }
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files
-    console.log(files)
+    if (!files) return
+
+    setFiles((prevFiles) => [...prevFiles, ...Array.from(files)])
+
+    const currentFiles = getValues('files') || []
+    setValue('files', [...currentFiles, ...Array.from(files)])
   }
 
   return (
@@ -392,10 +415,10 @@ export const AdminProductForm = ({
                     ? 'border-blue-400 bg-blue-50'
                     : 'border-slate-300 hover:border-slate-400'
                 }`}
-                // onDragEnter={handleDrag}
-                // onDragLeave={handleDrag}
-                // onDragOver={handleDrag}
-                // onDrop={handleDrop}
+                onDragEnter={handleDrag}
+                onDragLeave={handleDrag}
+                onDragOver={handleDrag}
+                onDrop={handleDrop}
               >
                 <input
                   type="file"
@@ -442,6 +465,25 @@ export const AdminProductForm = ({
                         {image}
                       </p>
                     </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Images to be uploaded */}
+              <div
+                className={cn('mt-6 space-y-3', { hidden: files.length === 0 })}
+              >
+                <h3 className="text-sm font-medium text-slate-700">
+                  Imágenes por cargar
+                </h3>
+                <div className="grid grid-cols-2 gap-3">
+                  {files.map((file, index) => (
+                    <img
+                      key={index}
+                      src={URL.createObjectURL(file)}
+                      alt="Product"
+                      className="w-full h-full object-cover rounded-lg"
+                    />
                   ))}
                 </div>
               </div>

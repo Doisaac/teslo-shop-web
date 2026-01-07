@@ -1,5 +1,6 @@
+import { useState } from 'react'
 import { Link } from 'react-router'
-import { PencilIcon, PlusIcon } from 'lucide-react'
+import { PencilIcon, PlusIcon, Trash } from 'lucide-react'
 
 import { AdminTitle } from '@/admin/components/AdminTitle'
 import { CustomPagination } from '@/components/custom/CustomPagination'
@@ -14,10 +15,29 @@ import {
 } from '@/components/ui/table'
 import { useProducts } from '@/shop/hooks/useProducts'
 import { currencyFormatter } from '@/lib/currency-formatter'
+import { useProduct } from '@/admin/hooks/useProduct'
+import { ConfirmDeleteDialog } from '@/admin/components/ConfirmDeleteDialog'
 
 export const AdminProductsPage = () => {
   const { data } = useProducts()
 
+  const [pendingId, setPendingId] = useState<string | null>(null)
+
+  const { deleteMutation } = useProduct(pendingId ?? '')
+
+  const openDelete = (id: string) => setPendingId(id)
+  const closeDelete = () => setPendingId(null)
+
+  const handleDeleteProduct = () => {
+    if (!pendingId) return
+
+    deleteMutation.mutate(pendingId, {
+      onSuccess: () => {
+        closeDelete()
+      },
+    })
+  }
+  
   return (
     <>
       <div className="flex justify-between items-center">
@@ -83,9 +103,18 @@ export const AdminProductsPage = () => {
               <TableCell>{product.sizes.join(', ')}</TableCell>
 
               <TableCell>
-                <Link to={`/admin/products/${product.id}`} className="">
-                  <PencilIcon className="w-4 h-4 text-blue-500" />
-                </Link>
+                <div className="flex items-center gap-4">
+                  <Link to={`/admin/products/${product.id}`} className="">
+                    <PencilIcon className="w-4 h-4 text-blue-500" />
+                  </Link>
+
+                  <Trash
+                    onClick={() => {
+                      openDelete(product.id)
+                    }}
+                    className="w-4 h-4 text-red-500 cursor-pointer"
+                  />
+                </div>
               </TableCell>
             </TableRow>
           ))}
@@ -93,6 +122,17 @@ export const AdminProductsPage = () => {
       </Table>
 
       <CustomPagination totalPages={data?.pages || 1} />
+
+      <ConfirmDeleteDialog
+        open={!!pendingId}
+        onOpenChange={(open) => (open ? null : closeDelete())}
+        title="Eliminar producto"
+        description="Esta acción no se puede deshacer. ¿Seguro que quieres eliminar este producto?"
+        confirmLabel="Eliminar"
+        cancelLabel="Cancelar"
+        loading={deleteMutation?.isPending}
+        onConfirm={handleDeleteProduct}
+      />
     </>
   )
 }

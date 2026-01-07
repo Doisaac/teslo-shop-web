@@ -1,73 +1,68 @@
-# React + TypeScript + Vite
+<div align="center">
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+  # 🛒 Teslo Shop
 
-Currently, two official plugins are available:
+  ![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
+  ![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
+  ![Vite](https://img.shields.io/badge/vite-%23646CFF.svg?style=for-the-badge&logo=vite&logoColor=white)
+  ![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+</div>
 
-## React Compiler
+![Preview](https://github.com/Doisaac/teslo-shop-web/blob/main/public/mian-screen-readme.png)
 
-The React Compiler is currently not compatible with SWC. See [this issue](https://github.com/vitejs/vite-plugin-react/issues/428) for tracking the progress.
+## 🛍️ About the project
 
-## Expanding the ESLint configuration
+**Teslo Shop** is a modern e-commerce web application built with **React + TypeScript**, focused on performance, scalability, and clean architecture.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+The frontend communicates with a **NestJS + PostgreSQL** [backend](https://github.com/Doisaac/teslo-shop-backend) via a REST API, using best practices such as cache synchronization, and role-based access control.
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+---
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## ✨ Features
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+### 🛍️ Shop Module
+- Product listing with pagination and filters 
+- Category-based navigation
+- Responsive UI using **Tailwind CSS + shadcn/ui**
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### 🔐 Auth Module
+- User login / logout with token persistence  
+- Global auth state management using **Zustand**  
+- Token verification with **Axios interceptors**  
+- Role-based route protection (user / admin)
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+### ⚙️ Admin Module
+- Admin panel for managing products
+- Image upload preview and validation
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+---
+
+## 🧱 Tech Stack
+
+| Layer       | Technologies |
+|------------|--------------|
+| **Frontend** | React + TypeScript + Vite (SWC), TanStack Query, React Router, Zustand, Tailwind CSS, shadcn/ui |
+| **Backend**  | NestJS + PostgreSQL (Neon) |
+| **Deployment** | Render (backend), Netlify (frontend) |
+| **Utilities** | Axios, React Hook Form, Sonner (toast notifications) |
+
+---
+
+## ⚡ Setup & Installation
+
+All commands are run from the root of the project.
+
+1. Clone the repository.
+2. Make sure the backend is running (default: `http://localhost:3000`).
+3. Rename `.env.template` to `.env` and configure the required environment variables.
+
+### 📦 Commands
+
+| Command             | Action                                          |
+|---------------------|--------------------------------------------------|
+| `pnpm install`      | Install dependencies                            |
+| `pnpm run dev`      | Start local dev server at `http://localhost:5173` |
+| `pnpm run build`    | Build the production app into `./dist/`         |
+
+---

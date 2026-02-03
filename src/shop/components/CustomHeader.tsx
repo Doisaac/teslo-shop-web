@@ -43,7 +43,7 @@ export const CustomHeader = () => {
               to="/"
               className={cn(
                 `text-sm font-medium transition-colors hover:text-primary`,
-                !gender ? 'underline underline-offset-4' : ''
+                !gender ? 'underline underline-offset-4' : '',
               )}
             >
               Todos
@@ -52,7 +52,7 @@ export const CustomHeader = () => {
               to="/gender/men"
               className={cn(
                 `text-sm font-medium transition-colors hover:text-primary`,
-                gender === 'men' ? 'underline underline-offset-4' : ''
+                gender === 'men' ? 'underline underline-offset-4' : '',
               )}
             >
               Hombres
@@ -61,7 +61,7 @@ export const CustomHeader = () => {
               to="/gender/women"
               className={cn(
                 `text-sm font-medium transition-colors hover:text-primary`,
-                gender === 'women' ? 'underline underline-offset-4' : ''
+                gender === 'women' ? 'underline underline-offset-4' : '',
               )}
             >
               Mujeres
@@ -70,7 +70,7 @@ export const CustomHeader = () => {
               to="/gender/kid"
               className={cn(
                 `text-sm font-medium transition-colors hover:text-primary`,
-                gender === 'kids' ? 'underline underline-offset-4' : ''
+                gender === 'kids' ? 'underline underline-offset-4' : '',
               )}
             >
               Niños

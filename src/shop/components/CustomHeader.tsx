@@ -1,7 +1,7 @@
 import { Search } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { useRef, type KeyboardEvent } from 'react'
+import { useRef, useState, type KeyboardEvent } from 'react'
 import { Link, useParams, useSearchParams } from 'react-router'
 import { cn } from '@/lib/utils'
 import { CustomLogo } from '@/components/custom/CustomLogo'
@@ -14,6 +14,8 @@ export const CustomHeader = () => {
 
   const inputRef = useRef<HTMLInputElement>(null)
   const searchQuery = searchParams.get('query') || ''
+
+  const [isMobileSearchOpen, setIsMobileSearchOpen] = useState<boolean>(false)
 
   const handleSearch = (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.key !== 'Enter') return
@@ -80,21 +82,35 @@ export const CustomHeader = () => {
           </nav>
 
           {/* Search and Cart */}
-          <div className="flex items-center space-x-4 justify-end flex-1">
-            <div className="hidden md:flex items-center space-x-2">
-              <div className="relative">
+          <div className="flex relative items-center space-x-4 justify-end flex-1">
+            <div
+              className={cn(
+                'hidden md:flex items-center space-x-2',
+                isMobileSearchOpen &&
+                  'flex fixed inset-x-0 m-0 top-16 z-50 bg-slate-50 p-4 md:hidden',
+              )}
+            >
+              <div className="relative w-full">
                 <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                 <Input
                   ref={inputRef}
                   placeholder="Buscar productos..."
-                  className="pl-9 w-64 h-9 bg-white"
+                  className="pl-9 w-full md:w-64 h-9 bg-white"
                   onKeyDown={handleSearch}
                   defaultValue={searchQuery}
                 />
               </div>
             </div>
 
-            <Button variant="ghost" size="icon" className="md:hidden">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="md:hidden"
+              onClick={() => {
+                setIsMobileSearchOpen((prevState) => !prevState)
+                setTimeout(() => inputRef.current?.focus(), 0)
+              }}
+            >
               <Search className="h-5 w-5" />
             </Button>
 

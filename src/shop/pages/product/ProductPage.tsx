@@ -203,12 +203,12 @@ export const ProductPage = () => {
               <div className="mt-6 space-y-3">
                 <div className="grid md:grid-cols-2 gap-3">
                   {product?.images.map((image, index) => (
-                    <div key={index} className="relative group overflow-hidden">
-                      <div className="aspect-square bg-slate-100 rounded-lg border border-slate-200 flex items-center justify-center">
+                    <div key={index} className="relative cursor-pointer">
+                      <div className="aspect-square bg-slate-100 rounded-lg border border-slate-200 flex items-center justify-center group overflow-hidden">
                         <img
                           src={image}
                           alt="Product"
-                          className="w-full h-full object-cover rounded-lg"
+                          className="w-full h-full object-cover rounded-lg group-hover:scale-105 transition-transform duration-300"
                           onClick={() => {
                             setImage(image)
                           }}

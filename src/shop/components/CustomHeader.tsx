@@ -131,14 +131,14 @@ export const CustomHeader = () => {
                 onClick={logout}
                 variant="outline"
                 size="sm"
-                className="ml-2 md:hidden"
+                className="ml-2 hidden lg:block"
               >
                 Cerrar sesión
               </Button>
             )}
 
             {isAdmin() && (
-              <Link to="/admin" className="md:hidden">
+              <Link to="/admin" className="hidden lg:block">
                 <Button variant="destructive" size="sm" className="ml-2">
                   Admin
                 </Button>

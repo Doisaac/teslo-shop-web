@@ -1,4 +1,4 @@
-import { Search } from 'lucide-react'
+import { Search, Menu } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { useRef, useState, type KeyboardEvent } from 'react'
@@ -6,6 +6,12 @@ import { Link, useParams, useSearchParams } from 'react-router'
 import { cn } from '@/lib/utils'
 import { CustomLogo } from '@/components/custom/CustomLogo'
 import { useAuthStore } from '@/auth/store/auth.store'
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetTrigger,
+} from '@/components/ui/sheet'
 
 export const CustomHeader = () => {
   const [searchParams, setSearchParams] = useSearchParams()
@@ -81,7 +87,7 @@ export const CustomHeader = () => {
             </Link>
           </nav>
 
-          {/* Search and Cart */}
+          {/* Search */}
           <div className="flex relative items-center space-x-4 justify-end flex-1">
             <div
               className={cn(
@@ -115,7 +121,7 @@ export const CustomHeader = () => {
             </Button>
 
             {authStatus === 'not-authenticated' ? (
-              <Link to="/auth/login">
+              <Link to="/auth/login" className="hidden lg:block">
                 <Button variant="default" size="sm" className="ml-2">
                   Login
                 </Button>
@@ -125,19 +131,84 @@ export const CustomHeader = () => {
                 onClick={logout}
                 variant="outline"
                 size="sm"
-                className="ml-2"
+                className="ml-2 md:hidden"
               >
                 Cerrar sesión
               </Button>
             )}
 
             {isAdmin() && (
-              <Link to="/admin">
+              <Link to="/admin" className="md:hidden">
                 <Button variant="destructive" size="sm" className="ml-2">
                   Admin
                 </Button>
               </Link>
             )}
+          </div>
+
+          {/* Navigation - Mobile */}
+          <div className="lg:hidden">
+            <Sheet>
+              <SheetTrigger>
+                <Button variant="ghost" size="icon">
+                  <Menu className="h-5 w-5" />
+                </Button>
+              </SheetTrigger>
+
+              <SheetContent side="left" className="w-64 p-4 lg:hidden">
+                <nav className="flex flex-col space-y-4 mt-8">
+                  <SheetClose asChild>
+                    <Link to="/" className="text-sm font-medium">
+                      Todos
+                    </Link>
+                  </SheetClose>
+
+                  <SheetClose asChild>
+                    <Link to="/gender/men" className="text-sm font-medium">
+                      Hombres
+                    </Link>
+                  </SheetClose>
+
+                  <SheetClose asChild>
+                    <Link to="/gender/women" className="text-sm font-medium">
+                      Mujeres
+                    </Link>
+                  </SheetClose>
+
+                  <SheetClose asChild>
+                    <Link to="/gender/kid" className="text-sm font-medium">
+                      Niños
+                    </Link>
+                  </SheetClose>
+
+                  <hr />
+
+                  {authStatus === 'not-authenticated' ? (
+                    <SheetClose asChild>
+                      <Link to="/auth/login">
+                        <Button className="w-full">Login</Button>
+                      </Link>
+                    </SheetClose>
+                  ) : (
+                    <SheetClose asChild>
+                      <Button variant="outline" onClick={logout}>
+                        Cerrar sesión
+                      </Button>
+                    </SheetClose>
+                  )}
+
+                  {isAdmin() && (
+                    <SheetClose asChild>
+                      <Link to="/admin">
+                        <Button variant="destructive" className="w-full">
+                          Admin
+                        </Button>
+                      </Link>
+                    </SheetClose>
+                  )}
+                </nav>
+              </SheetContent>
+            </Sheet>
           </div>
         </div>
       </div>
